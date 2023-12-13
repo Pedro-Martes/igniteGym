@@ -7,12 +7,13 @@ import { useNavigation } from "@react-navigation/native"
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes"
 
 
-export function Signin() {
+export function Signup() {
 
+    
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
-    function handleNewAccount(){
-        navigation.navigate('Signup')
+    function handleLoginAccount(){
+        navigation.navigate('Signin')
     }
 
     return (
@@ -21,21 +22,28 @@ export function Signin() {
                 <Image
                     source={BackgroundImg}
                     alt="Background Image of people in gym"
-                    resizeMode="contain"
                     defaultSource={BackgroundImg}
+                    resizeMode="contain"
                     position={'absolute'}
                     opacity={0.4}
                 />
 
                 <Center my={24}>
+                
                     <LogoSvg />
                     <Text color={'gray.200'} fontSize={'sm'}>Treine sua mente e o seu corpo</Text>
                 </Center>
 
                 <Center>
                     <Heading size='lg' color={'gray.100'} fontSize={'xl'} mb={6} fontFamily={'heading'}>
-                        Faça login para continuar
+                        Crie sua conta
                     </Heading>
+
+                    <Input
+                        placeholder="Nome"
+                        keyboardType="default"
+                  
+                    />
 
                     <Input
                         placeholder="E-mail"
@@ -49,19 +57,20 @@ export function Signin() {
                     />
 
                     <Button
-                        title="Entrar"
-                    />
-                </Center>
-
-                <Center marginTop={50}>
-                    <Text color={"gray.100"} fontSize={'sm'} fontFamily={'body'} marginBottom={3}>Ainda nao tem acesso?</Text>
-                    <Button
                         title="Criar Conta"
+                    />
+                </Center>
+
+             
+                   
+                    <Button
+                        title="Fazer Login"
                         variant={'outline'}
-                        onPress={handleNewAccount}
+                        marginTop={50}
+                        onPress={handleLoginAccount}
                     />
 
-                </Center>
+                
             </VStack>
         </ScrollView>
     )
