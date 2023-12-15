@@ -12,7 +12,7 @@ return(
     fontFamily={'body'}
     marginBottom={4}
   
-    placeholderTextColor={'gray.400'}
+    placeholderTextColor={'gray.300'}
     _focus={{
         backgroundColor: 'gray.700',
         borderWidth: 1,
