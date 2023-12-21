@@ -1,21 +1,66 @@
 import { Header } from "@components/Header";
 import { UserImage } from "@components/UserImage";
-import { Center, FlatList, HStack, Heading, Icon, Skeleton, Text, VStack } from "native-base";
-import { TouchableOpacity, ScrollView } from "react-native";
+import { Center, FlatList, HStack, Heading, Icon, Skeleton, Text, VStack, useToast } from "native-base";
+import { TouchableOpacity, ScrollView, Alert } from "react-native";
 import { useState } from 'react'
 import { Entypo } from '@expo/vector-icons'
 import { Input } from "@components/input";
 import { Button } from "@components/button";
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 
 export function Profile() {
     const PHOTO_SIZE = 33
     const [photoISLoading, setphotoISLoading] = useState<Boolean>(false)
+    const [userPhoto, setUserPhoto] = useState('https://github.com/Pedro-Martes.png')
+    const toast = useToast()
 
     async function handleUserPhotoSelect() {
-        await ImagePicker.launchImageLibraryAsync();
+        setphotoISLoading(true)
+        try {
+            const photoSelected = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                quality: 1,
+                aspect: [4, 4],
+                allowsEditing: true,
+                
+
+
+            });
+
+
+            if (photoSelected.canceled) {
+                return;
+            }
+
+            if (photoSelected.assets[0].uri) {
+
+                const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+
+                
+
+                if(photoInfo.size && (photoInfo.size / 1024 /1024) > 5 ){
+
+              1     
+                    return toast.show({
+                        title: "Foto muito grande! Utilize com no máximo 5mb",
+                        placement: 'top',
+                        bgColor: 'red.500'
+                        
+                    })
+                }
+
+                setUserPhoto(photoSelected.assets[0].uri)
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setphotoISLoading(false)
+        }
     }
+
+
 
 
     return (
@@ -37,7 +82,7 @@ export function Profile() {
                         :
 
                         <UserImage
-                            source={{ uri: 'https://github.com/Pedro-Martes.png' }}
+                            source={{ uri: userPhoto }}
                             alt="User Photo"
                             size={PHOTO_SIZE}
                         />

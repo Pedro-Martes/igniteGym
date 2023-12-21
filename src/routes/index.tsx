@@ -17,9 +17,9 @@ export function Routes() {
         <Box flex={1} backgroundColor={'gray.900'}>
 
             <NavigationContainer theme={theme}>
-                 <AppRoutes /> 
-                {/* <AuthRoutes /> */}
-                {/* <Exercise /> */}
+                  {/* <AppRoutes />   */}
+                 <AuthRoutes />  
+               
             </NavigationContainer>
         </Box>
     )
