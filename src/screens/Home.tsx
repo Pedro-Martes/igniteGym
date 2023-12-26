@@ -47,7 +47,7 @@ export function Home() {
             <VStack flex={1} px={8}>
 
                 <HStack justifyContent={'space-between'} marginBottom={5}>
-                    <Heading color={'gray.200'} fontSize={'md'} onPress={handleOpenExerciseDetails}> Exercício</Heading>
+                    <Heading color={'gray.200'} fontSize={'md'} onPress={handleOpenExerciseDetails} fontFamily={"heading"}> Exercício</Heading>
                     <VStack backgroundColor={'gray.500'} paddingLeft={2} paddingRight={2} rounded={'full'} >
                         <Text color={'gray.300'} fontSize={'sm'} > {exercise.length} </Text>
                     </VStack>

@@ -7,7 +7,7 @@ export function HistoryCard() {
         <HStack bg={'gray.600'} w={'full'} px={5} py={4} mb={3} rounded={'md'} alignItems={'center'} justifyContent={'space-between'}>
 
             <VStack mr={5} flex={1}>
-                <Heading color={'gray.100'}  fontSize={'md'} textTransform={'capitalize'}>
+                <Heading color={'gray.100'}  fontSize={'md'} textTransform={'capitalize'} fontFamily={"heading"}>
                     Costas
                 </Heading>
                 <Text color={'gray.200'} fontSize={'lg'} numberOfLines={1}>Puxada Frontal</Text>

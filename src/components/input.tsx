@@ -4,9 +4,16 @@ type Props = IInputProps & {
     errorMessage?: string | null;
 }
 
-export function Input({ errorMessage = null, ...rest }: Props) {
+export function Input({ errorMessage = null, isInvalid, ...rest }: Props) {
+
+    const isInvalidInput = !!errorMessage || isInvalid
+
     return (
-        <FormControl>
+        <FormControl isInvalid={isInvalidInput}>
+
+            <FormControl.ErrorMessage mb={2}>
+                {errorMessage}
+            </FormControl.ErrorMessage>
 
             <NativeBaseInput
                 bg={'gray.700'}
@@ -27,6 +34,7 @@ export function Input({ errorMessage = null, ...rest }: Props) {
                 {...rest}
 
             />
+
         </FormControl>
     )
 }

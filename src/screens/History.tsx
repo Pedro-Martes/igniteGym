@@ -28,7 +28,7 @@ export function History() {
                 keyExtractor={item => item}
                 renderItem={({ item }) => <HistoryCard />}
                 renderSectionHeader={({ section }) => (
-                    <Heading color={'gray.200'} fontSize={'md'} mt={10} mb={3}>{section.title}</Heading>
+                    <Heading color={'gray.200'} fontSize={'md'} mt={10} mb={3} fontFamily={"heading"}>{section.title}</Heading>
                 )}
                 contentContainerStyle={Exercise.length === 0 && { flex: 1, justifyContent: 'center', alignItems: 'center' }}
                 ListEmptyComponent={() => (

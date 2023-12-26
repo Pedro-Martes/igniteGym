@@ -36,7 +36,7 @@ export function Exercise() {
                             onPress={handleGoBack}
                         />
                     </TouchableOpacity>
-                    <Heading color={'gray.100'} fontSize={'lg'} flexShrink={1} flex={1} ml={2}>
+                    <Heading color={'gray.100'} fontSize={'lg'} flexShrink={1} flex={1} ml={2} fontFamily={"heading"}>
                         Puxada Frontal
                     </Heading>
                     <HStack alignItems={'center'}>

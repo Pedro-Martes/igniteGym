@@ -117,7 +117,7 @@ export function Profile() {
                 <Center px={10} mb={9}>
 
 
-                    <Heading color={'gray.200'} fontSize={'md'} mb={2} mt={12}>Alterar Senha</Heading>
+                    <Heading fontFamily={"heading"} color={'gray.200'} fontSize={'md'} mb={2} mt={12}>Alterar Senha</Heading>
                     <Input
                         bg={'gray.600'}
                         placeholder="Senha Atual"

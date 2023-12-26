@@ -19,7 +19,7 @@ export function ExerciseCard({...rest}: Props) {
                 resizeMode="cover"
                 />
                 <VStack   flex={1} ml={2}>
-                    <Heading fontSize={'lg'} color={'gray.100'}>Biceps Pikachu</Heading>
+                    <Heading fontSize={'lg'} color={'gray.100'} fontFamily={"heading"}>Biceps Pikachu</Heading>
                     <Text fontSize={'sm'} color={'gray.200'} numberOfLines={2} mt={1}>3 séries x 12 repetições6</Text>
                 </VStack>
 

@@ -7,13 +7,23 @@ import { useNavigation } from "@react-navigation/native"
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes"
 import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
+import * as yup from 'yup'
+import {yupResolver} from '@hookform/resolvers/yup'
 
-interface FormDataProps {
+type FormDataProps = {
     email: string;
     password: string;
     name: string;
     password_confirm: string;
 }
+
+const signupSchema = yup.object({
+    email: yup.string().email('Email invalido').required('Campo Obrigatório'),
+    password: yup.string().min(6, 'Senha deve conter no mínimo 6 caracteres').required('Campo Obrigatório'),
+    name: yup.string().min(3, 'Insira no mínimo 2 caracteres.').required('Campo Obrigatório'),
+    password_confirm: yup.string().required('Campo Obrigatório').oneOf([yup.ref('password')], 'Confirmação de senha não compatível.')
+    
+})
 
 export function Signup() {
 
@@ -23,7 +33,9 @@ export function Signup() {
         handleSubmit,
         formState: { errors },
 
-    } = useForm<FormDataProps>()
+    } = useForm<FormDataProps>({
+        resolver : yupResolver(signupSchema)
+    })
 
 
 
@@ -65,15 +77,6 @@ export function Signup() {
                     <Controller
                         control={control}
                         name='name'
-                        rules={{
-                            required: 'Campo obrigatório',
-                            pattern: {
-                                value: /^[a-zA-Z]+$/,
-                                message: 'Digite apenas letras',
-                            },
-
-
-                        }}
                         render={({ field: { onChange, value } }) => (
 
                             <Input
@@ -94,13 +97,7 @@ export function Signup() {
                     <Controller
                         control={control}
                         name='email'
-                        rules={{
-                            required: 'E-mail é obrigatório',
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: 'E-mail inválido'
-                            }
-                        }}
+                      
                         render={({ field: { onChange, value } }) => (
 
                             <Input
@@ -130,6 +127,8 @@ export function Signup() {
                                 secureTextEntry
                                 onChangeText={onChange}
                                 value={value}
+                                errorMessage={errors.password?.message}
+                                isInvalid={!!errors.password?.message}
 
                             />
 
@@ -148,6 +147,8 @@ export function Signup() {
                                 onChangeText={onChange}
                                 value={value}
                                 onSubmitEditing={handleSubmit(handleSignUp)}
+                                errorMessage={errors.password_confirm?.message}
+                                isInvalid={!!errors.password_confirm?.message}
 
                             />
 
@@ -167,7 +168,7 @@ export function Signup() {
                 <Button
                     title="Fazer Login"
                     variant={'outline'}
-                    marginTop={50}
+                    marginTop={12}
                     onPress={handleLoginAccount}
                 />
 
