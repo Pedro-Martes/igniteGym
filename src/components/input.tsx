@@ -23,7 +23,7 @@ export function Input({ errorMessage = null, isInvalid, ...rest }: Props) {
                 fontSize={'md'}
                 color={'gray.100'}
                 fontFamily={'body'}
-                marginBottom={4}
+                marginBottom={1}
 
                 placeholderTextColor={'gray.300'}
                 _focus={{

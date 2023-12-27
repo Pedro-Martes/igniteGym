@@ -8,7 +8,7 @@ import { AuthNavigatorRoutesProps } from "@routes/auth.routes"
 import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import * as yup from 'yup'
-import {yupResolver} from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 type FormDataProps = {
     email: string;
@@ -22,7 +22,7 @@ const signupSchema = yup.object({
     password: yup.string().min(6, 'Senha deve conter no mínimo 6 caracteres').required('Campo Obrigatório'),
     name: yup.string().min(3, 'Insira no mínimo 2 caracteres.').required('Campo Obrigatório'),
     password_confirm: yup.string().required('Campo Obrigatório').oneOf([yup.ref('password')], 'Confirmação de senha não compatível.')
-    
+
 })
 
 export function Signup() {
@@ -34,7 +34,7 @@ export function Signup() {
         formState: { errors },
 
     } = useForm<FormDataProps>({
-        resolver : yupResolver(signupSchema)
+        resolver: yupResolver(signupSchema)
     })
 
 
@@ -45,10 +45,19 @@ export function Signup() {
         navigation.navigate('Signin')
     }
 
-    function handleSignUp({ email, name, password, password_confirm }: FormDataProps) {
-        console.log({ email, name, password, password_confirm });
-    }
+    async function handleSignUp({ email, name, password }: FormDataProps) {
+        const response = await fetch('http://192.168.0.32:3333/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, name, password })
+        })
 
+        const data = await response.json();
+        console.log(data);
+    }
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <VStack flex={1} px={5} >
@@ -97,7 +106,7 @@ export function Signup() {
                     <Controller
                         control={control}
                         name='email'
-                      
+
                         render={({ field: { onChange, value } }) => (
 
                             <Input
@@ -168,7 +177,7 @@ export function Signup() {
                 <Button
                     title="Fazer Login"
                     variant={'outline'}
-                    marginTop={12}
+                    marginTop={3}
                     onPress={handleLoginAccount}
                 />
 
