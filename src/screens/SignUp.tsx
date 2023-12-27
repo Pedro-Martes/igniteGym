@@ -1,4 +1,4 @@
-import { Text, VStack, Image, Center, Heading, ScrollView } from "native-base"
+import { Text, VStack, Image, Center, Heading, ScrollView, useToast } from "native-base"
 import BackgroundImg from '../assets/background.png'
 import LogoSvg from '../assets/logo.svg'
 import { Input } from "@components/input"
@@ -9,6 +9,10 @@ import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { api } from '@services/api'
+import axios from "axios"
+import { Alert } from "react-native"
+import { AppError } from "src/util/appError"
 
 type FormDataProps = {
     email: string;
@@ -27,8 +31,8 @@ const signupSchema = yup.object({
 
 export function Signup() {
 
-    const {
 
+    const {
         control,
         handleSubmit,
         formState: { errors },
@@ -37,6 +41,7 @@ export function Signup() {
         resolver: yupResolver(signupSchema)
     })
 
+    const toast = useToast();
 
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
@@ -46,18 +51,23 @@ export function Signup() {
     }
 
     async function handleSignUp({ email, name, password }: FormDataProps) {
-        const response = await fetch('http://192.168.0.32:3333/users', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, name, password })
-        })
+        try {
+            const response = await api.post('/users', { email, name, password })
+            console.log(response.data);
 
-        const data = await response.json();
-        console.log(data);
+        } catch (error) {
+           const isAppError = error instanceof AppError;
+           const title = isAppError ? error.message : 'Não foi possível realizar o cadastro, tente novamente mais tarde.'
+           toast.show({
+            title,
+            placement: 'top',
+            bgColor: 'red.500'
+           })
+        }
+
     }
+
+
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <VStack flex={1} px={5} >
