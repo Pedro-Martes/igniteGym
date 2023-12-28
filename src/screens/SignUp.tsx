@@ -12,7 +12,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { api } from '@services/api'
 import axios from "axios"
 import { Alert } from "react-native"
-import { AppError } from "src/util/appError"
+import { AppError } from "../util/AppError"
+
 
 type FormDataProps = {
     email: string;
@@ -56,13 +57,16 @@ export function Signup() {
             console.log(response.data);
 
         } catch (error) {
-           const isAppError = error instanceof AppError;
-           const title = isAppError ? error.message : 'Não foi possível realizar o cadastro, tente novamente mais tarde.'
-           toast.show({
-            title,
-            placement: 'top',
-            bgColor: 'red.500'
-           })
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível realizar o cadastro, tente novamente mais tarde.'
+            toast.show({
+                title,
+                variant: "solid",
+                description: "Use um email diferente",
+                placement: 'top',
+                bgColor: 'red.500',
+                
+            })
         }
 
     }

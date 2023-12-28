@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { AppError } from 'src/util/appError';
+import { AppError } from '../util/AppError';
 
 const api = axios.create({
     baseURL: 'http://192.168.0.32:3333',
