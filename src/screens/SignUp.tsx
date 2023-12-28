@@ -37,7 +37,6 @@ export function Signup() {
         control,
         handleSubmit,
         formState: { errors },
-
     } = useForm<FormDataProps>({
         resolver: yupResolver(signupSchema)
     })
@@ -70,6 +69,8 @@ export function Signup() {
         }
 
     }
+
+    
 
 
     return (

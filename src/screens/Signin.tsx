@@ -1,4 +1,4 @@
-import { Text, VStack, Image, Center, Heading, ScrollView } from "native-base"
+import { Text, VStack, Image, Center, Heading, ScrollView, useToast } from "native-base"
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes"
 
 import { useNavigation } from "@react-navigation/native"
@@ -12,6 +12,9 @@ import { Input } from "@components/input"
 import { Button } from "@components/button"
 
 import * as yup from 'yup'
+import { useAuth } from "@hooks/useAuth"
+import { AppError } from "../util/AppError"
+import { useState } from "react"
 
 interface FormDataTypes {
     email: string;
@@ -25,6 +28,9 @@ const siginSchema = yup.object({
 
 export function Signin() {
 
+    const { signIn } = useAuth();
+    const [isLoading, setIsLoading] = useState<Boolean>()
+
     const {
 
         control,
@@ -36,13 +42,29 @@ export function Signin() {
     })
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
+    const toast = useToast()
     function handleNewAccount() {
         navigation.navigate('Signup')
     }
 
-    function handleSignIn({email,password}: FormDataTypes){
-        console.log({email, password});
+    async function handleSignIn({ email, password }: FormDataTypes) {
+
+        try {
+            setIsLoading(true)
+            await signIn(email, password)
+
+        } catch (error) {
+            
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Não foi possível realizar o Login. Tente novamente mais tarde'
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+
     }
 
     return (
@@ -63,7 +85,7 @@ export function Signin() {
                 </Center>
 
                 <Center>
-                    <Heading fontFamily={"heading"} size='lg' color={'gray.100'} fontSize={'xl'} mb={6} fontFamily={'heading'}>
+                    <Heading fontFamily={"heading"} size='lg' color={'gray.100'} fontSize={'xl'} mb={6} >
                         Faça login para continuar
                     </Heading>
 
@@ -106,6 +128,7 @@ export function Signin() {
                     <Button
                         title="Entrar"
                         onPress={handleSubmit(handleSignIn)}
+                        isLoading={!!isLoading}
                     />
 
                 </Center>
@@ -116,6 +139,7 @@ export function Signin() {
                         title="Criar Conta"
                         variant={'outline'}
                         onPress={handleNewAccount}
+                        isDisabled={!!isLoading}
                     />
 
                 </Center>
