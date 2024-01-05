@@ -13,6 +13,7 @@ import { api } from '@services/api'
 import axios from "axios"
 import { Alert } from "react-native"
 import { AppError } from "../util/AppError"
+import { useAuth } from "@hooks/useAuth"
 
 
 type FormDataProps = {
@@ -32,7 +33,7 @@ const signupSchema = yup.object({
 
 export function Signup() {
 
-
+    const [isLoading, setIsLoading] = useState(false)
     const {
         control,
         handleSubmit,
@@ -42,7 +43,7 @@ export function Signup() {
     })
 
     const toast = useToast();
-
+    const {signIn}= useAuth()
 
     const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
@@ -52,10 +53,13 @@ export function Signup() {
 
     async function handleSignUp({ email, name, password }: FormDataProps) {
         try {
-            const response = await api.post('/users', { email, name, password })
-            console.log(response.data);
+            setIsLoading(true)
+            await api.post('/users', { email, name, password })
+            await signIn(email, password)
+
 
         } catch (error) {
+            setIsLoading(false)
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível realizar o cadastro, tente novamente mais tarde.'
             toast.show({
@@ -64,13 +68,13 @@ export function Signup() {
                 description: "Use um email diferente",
                 placement: 'top',
                 bgColor: 'red.500',
-                
+
             })
         }
 
     }
 
-    
+
 
 
     return (
@@ -184,6 +188,7 @@ export function Signup() {
                     <Button
                         title="Criar Conta"
                         onPress={handleSubmit(handleSignUp)}
+                        isLoading={!!isLoading}
                     />
                 </Center>
 

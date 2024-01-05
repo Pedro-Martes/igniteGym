@@ -54,9 +54,10 @@ export function Signin() {
             await signIn(email, password)
 
         } catch (error) {
-            
+            setIsLoading(false)
             const isAppError = error instanceof AppError;
             const title = isAppError ? error.message : 'Não foi possível realizar o Login. Tente novamente mais tarde'
+            console.log(title);
 
             toast.show({
                 title,

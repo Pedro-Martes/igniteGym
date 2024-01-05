@@ -8,7 +8,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     // Retorna config após exibir dados
     return config
-    console.log("Dados Enviados =>", config.data);
+    
 
 }, (error) => {
     return Promise.reject(error)

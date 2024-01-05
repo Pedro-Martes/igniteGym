@@ -6,28 +6,36 @@ import { Exercise } from '@screens/Excercise'
 import { AuthCOntext } from '../context/AuthContext'
 import { useContext } from 'react'
 import { useAuth } from '../hooks/useAuth'
+import { Loading } from '@components/Loading'
 
 
 export function Routes() {
 
     const { colors } = useTheme()
-    const { user } = useAuth()
+    const { user, isLoadingUserStorageData } = useAuth()
 
     console.log("usuário", user);
 
     const theme = DefaultTheme
     theme.colors.background = colors.gray[900]
 
+    if (isLoadingUserStorageData) {
+        return <Loading />
+    } else {
 
-    return (
+        return (
 
-        <Box flex={1} backgroundColor={'gray.900'}>
+            <Box flex={1} backgroundColor={'gray.900'}>
 
-            <NavigationContainer theme={theme}>
-                {/* <AppRoutes />   */}
-                <AuthRoutes />
+                <NavigationContainer theme={theme}>
+                    {user.id ?
+                        <AppRoutes />
+                        : <AuthRoutes />
+                    }
 
-            </NavigationContainer>
-        </Box>
-    )
+
+                </NavigationContainer>
+            </Box>
+        )
+    }
 }
