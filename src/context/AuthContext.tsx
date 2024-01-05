@@ -22,7 +22,7 @@ type AuthContextProviderProps = {
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
     const [user, setUser] = useState<userDTO>({} as userDTO)
-    const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState<Boolean>(true)
+    const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true)
 
     async function userAndTokenUpdate(userData: userDTO, token: string) {
 

@@ -21,11 +21,17 @@ export function Exercise() {
     const toast = useToast()
     const route = useRoute();
     const [isLoading, setIsLoading] = useState(true)
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
     const { exerciseID } = route.params as RoutePramsProps;
     const Navigation = useNavigation<AppNavigationRoutesProps>()
 
 
+
+
+    function handleGoBack() {
+        Navigation.goBack()
+    }
 
     async function fetchExerciseByID() {
         try {
@@ -41,7 +47,9 @@ export function Exercise() {
             toast.show({
                 title,
                 placement: 'top',
-                backgroundColor: 'red.500'
+                backgroundColor: 'red.500',
+                duration: 5000,
+
             })
         } finally {
             setIsLoading(false)
@@ -49,9 +57,35 @@ export function Exercise() {
 
     }
 
-    function handleGoBack() {
-        //ir para a tela anterior
-        Navigation.goBack()
+    async function handleExerciseHistoryRegister() {
+
+        try {
+            setIsSubmitting(true)
+            await api.post('/history', {exercise_id: exerciseID})
+            toast.show({
+                title: "Exercício completo!",
+                placement: 'top',
+                bgColor: 'green.500',
+                duration: 5000
+            })
+
+            Navigation.navigate('History')
+
+
+        } catch (error) {
+            console.log('error');
+            const isAppError = error instanceof AppError
+            const title = isAppError ? error.message : 'Não foi possível registrar o execício.'
+            toast.show({
+                title,
+                placement: 'top',
+                backgroundColor: 'red.500',
+                duration: 5000,
+
+            })
+        } finally {
+            setIsSubmitting(false)
+        }
 
     }
 
@@ -117,6 +151,8 @@ export function Exercise() {
                             </HStack>
                             <Button
                                 title="Marcar como realizada"
+                                isLoading={!isSubmitting}
+                                onPress={handleExerciseHistoryRegister}
                             />
 
                         </Box>

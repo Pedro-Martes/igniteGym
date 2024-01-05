@@ -8,13 +8,30 @@ import { Input } from "@components/input";
 import { Button } from "@components/button";
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import { Controller, useForm } from "react-hook-form";
+import { useAuth } from "../hooks/useAuth";
 
+
+interface FormDataProps{
+    name: string
+    password: string
+    email: string
+    old_password: string
+    confirm_password: string
+}
 
 export function Profile() {
     const PHOTO_SIZE = 33
     const [photoISLoading, setphotoISLoading] = useState<Boolean>(false)
     const [userPhoto, setUserPhoto] = useState('https://github.com/Pedro-Martes.png')
     const toast = useToast()
+    const {user} = useAuth()
+    const { control, handleSubmit } = useForm<FormDataProps>({
+        defaultValues:{
+            name: user.name,
+            email: user.email
+        }
+    })
 
     async function handleUserPhotoSelect() {
         setphotoISLoading(true)
@@ -23,10 +40,7 @@ export function Profile() {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
                 aspect: [4, 4],
-                allowsEditing: true,
-                
-
-
+                allowsEditing: true
             });
 
 
@@ -38,16 +52,13 @@ export function Profile() {
 
                 const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
 
-                
+                if (photoInfo.size && (photoInfo.size / 1024 / 1024) > 5) {
 
-                if(photoInfo.size && (photoInfo.size / 1024 /1024) > 5 ){
-
-              1     
                     return toast.show({
                         title: "Foto muito grande! Utilize com no máximo 5mb",
                         placement: 'top',
                         bgColor: 'red.500'
-                        
+
                     })
                 }
 
@@ -101,17 +112,42 @@ export function Profile() {
                         </HStack>
                     </TouchableOpacity>
 
-                    <Input
-                        placeholder="Nome"
-                        bg={'gray.500'}
-                    />
+                    <Controller
+                        control={control}
+                        name="name"
+                        render={({ field: { value, onChange } }) => (
 
-                    <Input
-                        value="exemplo.com.br"
-                        isDisabled
-                        bg={'gray.500'}
-                    />
+                            <Input
+                                placeholder="Nome"
+                                bg={'gray.500'}
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
+                    >
 
+                    </Controller>
+
+
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { value, onChange } }) => (
+
+                            <Input
+                                placeholder="Email"
+                                bg={'gray.500'}
+                                onChangeText={onChange}
+                                value={value}
+                                isDisabled
+                            />
+                        )}
+                    >
+
+                    </Controller>
+
+
+                   
                 </Center>
 
                 <Center px={10} mb={9}>
