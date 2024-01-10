@@ -67,7 +67,7 @@ export function Home() {
 
     useEffect(() => {
         fetchGroups();
-        console.log(groupSelected);
+        
     }, [])
 
     useFocusEffect(useCallback(() => {

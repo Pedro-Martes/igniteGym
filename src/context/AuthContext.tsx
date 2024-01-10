@@ -9,6 +9,7 @@ import { api } from "../services/api";
 
 export type AuthContextDataProps = {
     user: userDTO;
+    updateUserProfile: (userUpdated: userDTO) => Promise<void>;
     signIn: (email: string, password: string) => Promise<void>;
     signOut: () => Promise<void>;
     isLoadingUserStorageData: boolean
@@ -37,8 +38,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             await storageAuthTokenSave(token)
 
         } catch (error) {
-            throw error 
-        }finally{
+            throw error
+        } finally {
             setIsLoadingUserStorageData(false)
         }
     }
@@ -63,7 +64,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         }
 
     }
-    
+
     async function signOut() {
 
         try {
@@ -76,6 +77,15 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             console.log(error);
         } finally {
             setIsLoadingUserStorageData(false)
+        }
+    }
+
+    async function updateUserProfile(userUpdated: userDTO) {
+        try {
+            setUser(userUpdated)
+            await storageUserSave(userUpdated)
+        } catch (error) {
+            throw error
         }
     }
 
@@ -106,9 +116,17 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     useEffect(() => {
         loadUSerData()
     }, [])
+
+    useEffect(() => {
+        const subscribe = api.registerIntercepteTokenManager(signOut)
+        return() => {
+            subscribe();
+        }
+    }, [signOut])
+    
     return (
 
-        <AuthCOntext.Provider value={{ user: user, signIn, isLoadingUserStorageData, signOut }}>
+        <AuthCOntext.Provider value={{ user: user, signIn, isLoadingUserStorageData, signOut, updateUserProfile }}>
 
             {children}
 

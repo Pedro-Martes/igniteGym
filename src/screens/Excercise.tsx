@@ -151,7 +151,7 @@ export function Exercise() {
                             </HStack>
                             <Button
                                 title="Marcar como realizada"
-                                isLoading={!isSubmitting}
+                                isLoading={isSubmitting}
                                 onPress={handleExerciseHistoryRegister}
                             />
 

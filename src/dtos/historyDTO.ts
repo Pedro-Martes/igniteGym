@@ -1,6 +1,6 @@
 export type HistoryDTO = {
     id: string
-   nane: string
+   name: string
    group: string
    hour: string
    exercise_id: string

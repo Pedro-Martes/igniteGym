@@ -13,7 +13,7 @@ export function HistoryCard({data}: Props) {
                 <Heading color={'gray.100'}  fontSize={'md'} textTransform={'capitalize'} fontFamily={"heading"}>
                     {data.group}
                 </Heading>
-                <Text color={'gray.200'} fontSize={'lg'} numberOfLines={1}>{data.nane}</Text>
+                <Text color={'gray.200'} fontSize={'lg'} numberOfLines={1}>{data.name}</Text>
             </VStack>
             <Text mt={2} color={'gray.300'} fontSize={'md'}>{data.hour}</Text>
         </HStack>
